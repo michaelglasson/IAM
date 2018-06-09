@@ -1,0 +1,46 @@
+{
+  "repository" : {
+    "0" : {
+      "@class" : ".Group",
+      "id" : 0,
+      "name" : "Ciao",
+      "memberOfId" : [ ],
+      "memberIds" : [ 5, 1, 2 ]
+    },
+    "1" : {
+      "@class" : ".Group",
+      "id" : 1,
+      "name" : "Goodbye",
+      "memberOfId" : [ 0 ],
+      "memberIds" : [ 3 ]
+    },
+    "2" : {
+      "@class" : ".Group",
+      "id" : 2,
+      "name" : "Hello",
+      "memberOfId" : [ 0 ],
+      "memberIds" : [ ]
+    },
+    "3" : {
+      "@class" : ".Group",
+      "id" : 3,
+      "name" : "Bonjour",
+      "memberOfId" : [ 1 ],
+      "memberIds" : [ 4 ]
+    },
+    "4" : {
+      "@class" : ".Group",
+      "id" : 4,
+      "name" : "Zdravo",
+      "memberOfId" : [ 3 ],
+      "memberIds" : [ 5 ]
+    },
+    "5" : {
+      "@class" : ".User",
+      "id" : 5,
+      "name" : "Mike",
+      "memberOfId" : [ 4, 0 ]
+    }
+  },
+  "searcher" : null
+}

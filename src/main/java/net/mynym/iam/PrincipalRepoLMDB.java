@@ -1,0 +1,101 @@
+package net.mynym.iam;
+
+import static java.nio.ByteBuffer.allocateDirect;
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.junit.Assert.assertNull;
+import static org.lmdbjava.DbiFlags.MDB_CREATE;
+import static org.lmdbjava.Env.create;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+
+import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
+import org.apache.lucene.document.StringField;
+import org.apache.lucene.document.TextField;
+import org.lmdbjava.Dbi;
+import org.lmdbjava.Env;
+import org.lmdbjava.Txn;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+public class PrincipalRepoLMDB implements PrincipalRepo {
+	public static final ObjectMapper mapper = new ObjectMapper();
+	private static final String DB_NAME = "PrincipalRepo";
+	final File path = new File("src\\test\\resources");
+	final Env<ByteBuffer> env = create().setMapSize(1000 * 1000).setMaxDbs(1).open(path);
+	final Dbi<ByteBuffer> db = env.openDbi(DB_NAME, MDB_CREATE);
+	final ByteBuffer key = allocateDirect(env.getMaxKeySize());
+	final ByteBuffer val = allocateDirect(700);
+	private Searcher searcher;
+
+	@Override
+	public void put(Principal toPut) {
+		key.clear();
+		key.putInt(toPut.id).flip();
+		val.clear();
+		String json = toJson(toPut);
+		val.put(json.getBytes(UTF_8)).flip();
+		db.put(key, val);
+		try {
+			searcher.w.addDocument(toPut.toLuceneDoc());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public Principal get(Integer toGet) {
+		try (Txn<ByteBuffer> txn = env.txnRead()) {
+			key.clear();
+			key.putInt(toGet).flip();
+			final ByteBuffer found = db.get(txn, key);
+			System.out.println(found.toString());
+			String json = UTF_8.decode(found).toString();
+			System.out.println(json);
+			Principal p = mapper.readValue(json, Principal.class);
+			return p;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+
+	}
+
+	@Override
+	public void remove(Principal toRemove) {
+		// We can also delete. The simplest way is to let Dbi allocate a new Txn...
+		db.delete(key);
+
+		// Now if we try to fetch the deleted row, it won't be present
+		try (Txn<ByteBuffer> txn = env.txnRead()) {
+			assertNull(db.get(txn, key));
+		}
+
+	}
+	
+	public String toJson(Principal toWrite) {
+		try {
+			return mapper.writer().writeValueAsString(toWrite);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	@Override
+	public void setSearcher(Searcher s) {
+		searcher = s;
+		
+	}
+
+	@Override
+	public Searcher getSearcher() {
+		return searcher;
+	}
+
+}
