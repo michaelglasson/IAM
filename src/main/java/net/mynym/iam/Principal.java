@@ -17,15 +17,8 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 public abstract class Principal {
 	public Integer id;
 	String name;
-	public Set<Integer> memberOfId = new LinkedHashSet<>();
+	public Set<Integer> memberOfIds = new LinkedHashSet<>();
 	private Set<Group> memberOf = new LinkedHashSet<>();
-	@JsonIgnore
-	public Set<Group> getMemberOf() {
-		if (memberOf.isEmpty()) {
-			memberOfId.stream().forEach(i -> memberOf.add((Group) repo.get(i)));
-		}
-		return memberOf;
-	}
 	@JsonIgnore
 	PrincipalRepo repo;
 
@@ -36,7 +29,7 @@ public abstract class Principal {
 	public void addAsMemberOf(Group toAddTo) {
 		toAddTo.justAddMember(this);
 		memberOf.add(toAddTo);
-		memberOfId.add(toAddTo.id);
+		memberOfIds.add(toAddTo.id);
 		put();
 		toAddTo.put();
 	}
@@ -51,11 +44,11 @@ public abstract class Principal {
 	
 	public String toString() {
 		return "Id: " + name + ", Principal type: " + this.getClass().getSimpleName() + ", Count of memberOf: "
-				+ memberOfId.size();
+				+ memberOfIds.size();
 	}
 	
 	public void makeToken(StringBuilder buf) {
-		for (Group g : memberOf) {
+		for (Group g : getMemberOf()) {
 			buf.append("|" + g.getName());
 			g.makeToken(buf);
 		}
@@ -64,7 +57,7 @@ public abstract class Principal {
 	}
 
 	public void makeTokenSet(Set<Group> tSet) {
-		for (Group g : memberOf) {
+		for (Group g : getMemberOf()) {
 			tSet.add(g);
 			g.makeTokenSet(tSet);
 		}
@@ -77,6 +70,15 @@ public abstract class Principal {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	@JsonIgnore
+	public Set<Group> getMemberOf() {
+		if (memberOf.isEmpty()) {
+			memberOfIds.stream().forEach(i -> memberOf.add((Group) repo.get(i)));
+		}
+		return memberOf;
+	}
+
 
 	public PrincipalRepo getRepo() {
 		return repo;

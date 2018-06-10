@@ -7,8 +7,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -22,7 +20,7 @@ public class LMDBTest {
 	static PrincipalFactory factory;
 	static ObjectMapper mapper;
     @Rule
-    public TemporaryFolder _tempFolder = new TemporaryFolder();
+    public TemporaryFolder tempFolder = new TemporaryFolder();
 
 	static Group Ciao;
 	static Group Goodbye;
@@ -53,52 +51,39 @@ public class LMDBTest {
 	@Test
 	public void test1() {
 		assertTrue(Zdravo.memberIds.contains(Mike.id));
-		assertTrue(Mike.memberOfId.contains(Zdravo.id));
+		assertTrue(Mike.memberOfIds.contains(Zdravo.id));
 		assertTrue(Mike.getMemberOf().contains(Zdravo));
 		assertTrue(Zdravo.getMember().contains(Mike));
 	}
 	
 	@Test
 	public void test2(){
-		Principal p = factory.repo.get(3);
-		assertTrue(p.id == 3);
+		System.out.println("Testing repository retrieval by id (using ids 0-5)");
+		for (Integer i = 0; i < 6; i++) {
+			Principal p = factory.repo.get(i);
+			assertTrue("Fetched principal id does not match fetch request", p.id == i);
+			
+		}
 	}
 	
 	@Test
 	public void test3() throws JsonGenerationException, JsonMappingException, IOException {
-		Principal p = Zdravo;
-		FileWriter out = new FileWriter("repo.json");
+		File file = tempFolder.newFile("repo.json");
+		FileWriter out = new FileWriter(file);
 		mapper.writer().withDefaultPrettyPrinter().writeValue(out, factory.repo);
 		out.close();
-		
-		factory.repo = null;
-		
-		factory.repo = mapper.readValue(new FileReader("repo.json"), PrincipalRepoWithMap.class);	
-		
-	}
-	
-	@Test
-	public void tmp() throws IOException {
-		File tempFile = _tempFolder.newFile("file.txt");
+		PrincipalRepoWithMap testRepo = mapper.readValue(new FileReader(file), PrincipalRepoWithMap.class);
+		System.out.println("Testing repository retrieval by id (using ids 0-5)");
+		for (Integer i = 0; i < 6; i++) {
+			Principal p = factory.repo.get(i);
+			Principal q = testRepo.get(i);
+			assertTrue("Fetched principal id does not match fetch request", p.id == q.id);
+			
+		}
 
 		
 	}
 	
-	 static TemporaryFolder _tempFolder2;
-
-	    @After
-	    public void after() {
-	        _tempFolder2 = _tempFolder;
-	        System.out.println(_tempFolder2.getRoot().exists());
-	    }
-
-	    @AfterClass
-	    public static void afterClass() {
-	        System.out.println(_tempFolder2.getRoot().exists());
-	    }
-
-	    @Test
-	    public void pass() {
-	    }
+	
 	
 }

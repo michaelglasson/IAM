@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class PrincipalRepoWithMap implements PrincipalRepo {
 	public Map<Integer, Principal> repository = new HashMap<>();
 
@@ -30,6 +32,7 @@ public class PrincipalRepoWithMap implements PrincipalRepo {
 		
 	}
 
+	@JsonIgnore
 	@Override
 	public Searcher getSearcher() {
 		// TODO Auto-generated method stub
