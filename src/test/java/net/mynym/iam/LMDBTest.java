@@ -2,6 +2,7 @@ package net.mynym.iam;
 
 import static org.junit.Assert.assertTrue;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -19,8 +20,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class LMDBTest {
 	static PrincipalFactory factory;
 	static ObjectMapper mapper;
-    @Rule
-    public TemporaryFolder tempFolder = new TemporaryFolder();
+	@Rule
+	public TemporaryFolder tempFolder = new TemporaryFolder();
 
 	static Group Ciao;
 	static Group Goodbye;
@@ -31,8 +32,7 @@ public class LMDBTest {
 
 	@BeforeClass
 	public static void setup() {
-		factory = new PrincipalFactory("test");
-		mapper = new ObjectMapper();
+		factory = new PrincipalFactory("prod");
 
 		Ciao = factory.makeGroup("Ciao");
 		Goodbye = factory.makeGroup("Goodbye");
@@ -55,35 +55,43 @@ public class LMDBTest {
 		assertTrue(Mike.getMemberOf().contains(Zdravo));
 		assertTrue(Zdravo.getMember().contains(Mike));
 	}
-	
+
 	@Test
-	public void test2(){
+	public void test2() {
 		System.out.println("Testing repository retrieval by id (using ids 0-5)");
 		for (Integer i = 0; i < 6; i++) {
 			Principal p = factory.repo.get(i);
 			assertTrue("Fetched principal id does not match fetch request", p.id == i);
-			
 		}
 	}
-	
+
 	@Test
-	public void test3() throws JsonGenerationException, JsonMappingException, IOException {
-		File file = tempFolder.newFile("repo.json");
+	public void ExportToFileThenImportToNewRepositoryMatch()
+			throws JsonGenerationException, JsonMappingException, IOException {
+		
+		//File file = tempFolder.newFile("repo.json");
+		File file = new File("repo.json");
+
+		// Export repository to file
 		FileWriter out = new FileWriter(file);
-		mapper.writer().withDefaultPrettyPrinter().writeValue(out, factory.repo);
+		factory.repo.exportToJson(out);
 		out.close();
-		PrincipalRepoWithMap testRepo = mapper.readValue(new FileReader(file), PrincipalRepoWithMap.class);
-		System.out.println("Testing repository retrieval by id (using ids 0-5)");
+
+		// Populate test repository from file
+		PrincipalRepo testRepo = new PrincipalRepoWithMap();
+		FileReader in = new FileReader(file);
+		testRepo.importFromJson(in);
+		in.close();
+
+		// Check that all entries match
+		System.out.println("Testing repository export and import by id (using ids 0-5)");
 		for (Integer i = 0; i < 6; i++) {
 			Principal p = factory.repo.get(i);
 			Principal q = testRepo.get(i);
 			assertTrue("Fetched principal id does not match fetch request", p.id == q.id);
-			
+			assertTrue("Fetched principal name does not match original", p.name.equals(q.name));
 		}
 
-		
 	}
-	
-	
-	
+
 }
