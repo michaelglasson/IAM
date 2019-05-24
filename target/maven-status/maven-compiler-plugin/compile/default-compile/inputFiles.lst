@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 D:\Users\mg\Documents\Dev2016\workspace\IAM\src\main\java\net\mynym\iam\PrincipalRepoWithMap.java
 D:\Users\mg\Documents\Dev2016\workspace\IAM\src\main\java\net\mynym\iam\Principal.java
 D:\Users\mg\Documents\Dev2016\workspace\IAM\src\main\java\net\mynym\iam\PrincipalRepo.java
@@ -9,3 +10,16 @@ D:\Users\mg\Documents\Dev2016\workspace\IAM\src\main\java\net\mynym\iam\Principa
 D:\Users\mg\Documents\Dev2016\workspace\IAM\src\main\java\net\mynym\iam\Group.java
 D:\Users\mg\Documents\Dev2016\workspace\IAM\src\main\java\net\mynym\iam\PermissionSet.java
 D:\Users\mg\Documents\Dev2016\workspace\IAM\src\main\java\net\mynym\iam\User.java
+=======
+C:\Users\mg\Documents\workspace\IAM\src\main\java\net\mynym\iam\PrincipalRepo.java
+C:\Users\mg\Documents\workspace\IAM\src\main\java\net\mynym\iam\PrincipalRepoLMDB.java
+C:\Users\mg\Documents\workspace\IAM\src\main\java\net\mynym\iam\PrincipalRepoWithMap.java
+C:\Users\mg\Documents\workspace\IAM\src\main\java\net\mynym\iam\PermissionSet.java
+C:\Users\mg\Documents\workspace\IAM\src\main\java\net\mynym\iam\Group.java
+C:\Users\mg\Documents\workspace\IAM\src\main\java\net\mynym\iam\Searcher.java
+C:\Users\mg\Documents\workspace\IAM\src\main\java\net\mynym\iam\Principal.java
+C:\Users\mg\Documents\workspace\IAM\src\main\java\net\mynym\iam\PrincipalFactory.java
+C:\Users\mg\Documents\workspace\IAM\src\main\java\net\mynym\iam\Permission.java
+C:\Users\mg\Documents\workspace\IAM\src\main\java\net\mynym\iam\Operation.java
+C:\Users\mg\Documents\workspace\IAM\src\main\java\net\mynym\iam\User.java
+>>>>>>> refs/remotes/origin/master

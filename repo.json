@@ -1,46 +1,10 @@
 {
   "repository" : {
-    "0" : {
-      "@class" : ".Group",
-      "id" : 0,
-      "name" : "Ciao",
-      "memberOfIds" : [ ],
-      "memberIds" : [ 5, 1, 2 ]
-    },
-    "1" : {
-      "@class" : ".Group",
-      "id" : 1,
-      "name" : "Goodbye",
-      "memberOfIds" : [ 0 ],
-      "memberIds" : [ 3 ]
-    },
-    "2" : {
-      "@class" : ".Group",
-      "id" : 2,
-      "name" : "Hello",
-      "memberOfIds" : [ 0 ],
-      "memberIds" : [ ]
-    },
-    "3" : {
-      "@class" : ".Group",
-      "id" : 3,
-      "name" : "Bonjour",
-      "memberOfIds" : [ 1 ],
-      "memberIds" : [ 4 ]
-    },
-    "4" : {
-      "@class" : ".Group",
-      "id" : 4,
-      "name" : "Zdravo",
-      "memberOfIds" : [ 3 ],
-      "memberIds" : [ 5 ]
-    },
-    "5" : {
-      "@class" : ".User",
-      "id" : 5,
-      "name" : "Mike",
-      "memberOfIds" : [ 4, 0 ]
-    }
-  },
-  "searcher" : null
+    "0" : {"@class":".Group","id":0,"name":"Ciao","memberOfIds":[],"memberIds":[5,1,2]},
+    "1" : {"@class":".Group","id":1,"name":"Goodbye","memberOfIds":[0],"memberIds":[3]},
+    "2" : {"@class":".Group","id":2,"name":"Hello","memberOfIds":[0],"memberIds":[]},
+    "3" : {"@class":".Group","id":3,"name":"Bonjour","memberOfIds":[1],"memberIds":[4]},
+    "4" : {"@class":".Group","id":4,"name":"Zdravo","memberOfIds":[3],"memberIds":[5]},
+    "5" : {"@class":".User","id":5,"name":"Mike","memberOfIds":[4,0]}
+   }
 }

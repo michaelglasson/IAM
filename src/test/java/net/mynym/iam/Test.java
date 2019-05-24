@@ -53,7 +53,7 @@ public class Test {
 		out = new FileWriter("repo2.json");
 		mapper.writer().withDefaultPrettyPrinter().writeValue(out, factory.repo);
 		
-		PrincipalRepoLMDB r = new PrincipalRepoLMDB();
+		//PrincipalRepoLMDB r = new PrincipalRepoLMDB();
 		//r.tutorial1();
 		
 	}
